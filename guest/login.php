@@ -1,5 +1,12 @@
 <?php
 
-echo "login";
+top('Вход');
+
+?>
+
+
+<?php
+
+bottom();
 
 ?>
