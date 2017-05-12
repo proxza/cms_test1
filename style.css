@@ -7,10 +7,43 @@ a {
     text-decoration: none;
 }
 
+p {
+    margin: 10px 0;
+}
+
+body, button, input[type=text], input[type=password], h1 {
+    font-family: 'Roboto Slab', serif;
+    font-size: 12px;
+}
+
+h1 {
+    color: #576369;
+    font-size: 19px;
+}
+
+button {
+    background: #34C0E2;
+    color: #fff;
+    border: 1px solid #34C0E2;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+input[type=text], input[type=password] {
+    padding: 5px;
+    border: 1px solid #EEEFF2;
+    border-radius: 5px;
+    color: #ADB6BA;
+    width: 220px;
+    outline: none;
+}
 
 .wrapper, .content, .menu, body, html {
-    font-family: Calibri;
-    font-style: normal;
     height: 100%;
 }
 
@@ -20,15 +53,14 @@ a {
 
 .content {
     flex: 1;
-    padding: 40px;
     background: #FCFCFD;
 }
 
 .block {
+    margin: 40px;
     padding: 20px;
     background: #fff;
     border: 1px solid #CCCCCC;
-
 }
 
 .menu {
@@ -39,6 +71,7 @@ a {
 .menu a {
     display: block;
     color: #FFF;
-    padding: 10px;
+    padding: 10px 25px;
+    text-transform: uppercase;
 }
 
