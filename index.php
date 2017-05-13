@@ -14,6 +14,10 @@ if ($_SERVER['REQUEST_URI'] == '/') {
     if (!preg_match('/^[A-z0-9]{3,30}$/', $page)) exit ('Error URL!');
 }
 
+// Подключение к базе
+$connect = mysqli_connect('localhost', 'root', '', 'cms_1');
+if (!$connect) exit ('Не удалось подключиться к базе');
+
 // Проверка существования файлов (страниц)
 if (file_exists('all/'.$page.'.php')) {
     include 'all/'.$page.'.php';
@@ -22,7 +26,7 @@ if (file_exists('all/'.$page.'.php')) {
 } elseif ($_SESSION['ulogin'] != 1 AND file_exists('guest/'.$page.'.php')) {
     include 'guest/'.$page.'.php';
 } else {
-    exit ('Страница 404');
+    not_found();
 }
 
 // Функция вывода pop-up сообщений
@@ -33,6 +37,63 @@ function message($text) {
 // Функция редиректа
 function go($url) {
     exit ('{ "go" : "'.$url.'" }');
+}
+
+// Функция рандомной строки
+function random_str($num = 30) {
+    return substr(str_shuffle('0123456789abcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, $num);
+}
+
+// Функция вывода страниц 404 (не найденных)
+function not_found() {
+    exit ('Страница 404');
+}
+
+// Капча
+function captcha_show() {
+    $questions = array(
+        1 => 'Столица России?',
+        2 => 'Столица Украины?',
+        3 => 'Столица США?',
+        4 => 'Имя короля поп музыки?',
+        5 => 'Разработчики GTA V?',
+    );
+
+    $num = mt_rand(1, count($questions));
+    $_SESSION['captcha'] = $num;
+
+    echo $questions[$num];
+}
+
+// Проверка капчи
+function captcha_valid() {
+    $answers = array(
+        1 => 'москва',
+        2 => 'киев',
+        3 => 'вашингтон',
+        4 => 'майкл',
+        5 => 'rockstar',
+    );
+
+    if ($_SESSION['captcha'] != array_search(mb_strtolower($_POST['captcha']), $answers)) {
+        message('Ответ на вопрос указан не верно!');
+    }
+}
+
+// Проверка почты на валидность
+function email_valid() {
+    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        message('E-mail указан не верно!');
+    }
+}
+
+// Проверка пароля на валидность
+function password_valid() {
+    if (!preg_match('/^[A-z0-9]{6,20}$/', $_POST['password'])) {
+        message('Пароль не соответствует требованиям!');
+    }
+
+    $_POST['password'] = md5($_POST['password']);
 }
 
 // Вывод верха страницы и заголовков
