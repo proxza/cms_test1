@@ -21,9 +21,9 @@ if (!$connect) exit ('Не удалось подключиться к базе')
 // Проверка существования файлов (страниц)
 if (file_exists('all/'.$page.'.php')) {
     include 'all/'.$page.'.php';
-} elseif ($_SESSION['ulogin'] == 1 AND file_exists('auth/'.$page.'.php')) {
+} elseif ($_SESSION['id'] AND file_exists('auth/'.$page.'.php')) {
     include 'auth/'.$page.'.php';
-} elseif ($_SESSION['ulogin'] != 1 AND file_exists('guest/'.$page.'.php')) {
+} elseif (!$_SESSION['id'] AND file_exists('guest/'.$page.'.php')) {
     include 'guest/'.$page.'.php';
 } else {
     not_found();
@@ -126,15 +126,22 @@ function top($title) {
     <body>
     
     <div class="wrapper">
-    <div class="menu">
-    <a href="/">Главная</a>
-    <a href="/login">Вход</a>
-    <a href="/register">Регистрация</a>
-    </div>
+    <div class="menu">';
+
+    // Меню
+    if (!$_SESSION['id']) {
+        echo '<a href="/">Главная</a>
+        <a href="/login">Вход</a>
+        <a href="/register">Регистрация</a>';
+    } else {
+        echo '<a href="/profile">Профайл</a>
+        <a href="/history">История</a>
+        <a href="/exit">Выход</a>';
+    }
+
+    echo '</div>
     <div class="content">
-    <div class="block">
-  
-    ';
+    <div class="block">';
 }
 
 // Вывод низа страницы

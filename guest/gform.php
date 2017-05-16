@@ -4,7 +4,20 @@
 if ($_POST['login_f']) {
 
     captcha_valid();
-    message('OK');
+    email_valid();
+    password_valid();
+
+    // Проверяем существует ли в базе такой пользователь (проверка по мылу)
+    if (!mysqli_num_rows(mysqli_query($connect, "SELECT `id` FROM `users` WHERE `email` = '$_POST[email]' AND `password` = '$_POST[password]'"))){
+        message('Такой пользователь не найден либо пароль не верен!');
+    }
+
+    $row = mysqli_fetch_array(mysqli_query($connect, "SELECT * FROM `users` WHERE `email` = '$_POST[email]'"));
+    foreach ($row as $key => $value){
+        $_SESSION[$key] = $value;
+    }
+
+    go('profile');
 
 
     // Регистрация
